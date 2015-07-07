@@ -1,0 +1,4 @@
+git config --global user.name "Surojit Pathak"
+git config --global user.email surojit.pathak@gmail.com
+git config --global core.editor "vim"
+
