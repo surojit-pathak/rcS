@@ -16,13 +16,10 @@ function suro_rem_old_ssh_fingerprint ()
      if [ $# -ne 1 ] ; then echo "usage: $FUNCNAME <hostname>"; return; fi
 
      HOST=$1
-     TMPFILE=/tmp/ssh_fingerprint_removal
-     SSH $HOST >& $TMPFILE
-     grep -q "Offending RSA" $TMPFILE
-     if [ $? -ne 0 ]; then echo "$HOST is not known"; return; fi
-
-     file_line=`grep "Offending RSA" $TMPFILE | awk '{print $NF}'`
-     FILE=$( echo $file_line | cut -f1 -d: )
-     LINE=$( echo $file_line | cut -f2 -d: )
-     sed -e "$LINEd" $FILE > $FILE
+     FILE=~/.ssh/known_hosts
+     grep -q $HOST $FILE
+     if [ $? -ne 0 ]; then echo "$HOST is not known yet"; return; fi
+ 
+     LINE=$( grep -n $HOST $FILE | cut -f1 -d: )
+     sed -i.bak "${LINE}d" $FILE
 }
