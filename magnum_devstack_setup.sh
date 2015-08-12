@@ -21,8 +21,8 @@ git clone https://github.com/openstack-dev/devstack.git /opt/stack/devstack
 cd ~
 git clone https://git.openstack.org/openstack/magnum
 
-cp ~/github-surojit-pathak/rcS/magnum.localrc /opt/stack/localrc
-cp ~/github-surojit-pathak/rcS/magnum.local.sh /opt/stack/local.sh
+cp ~/github-surojit-pathak/rcS/magnum.localrc /opt/stack/devstack/localrc
+cp ~/github-surojit-pathak/rcS/magnum.local.sh /opt/stack/devstack/local.sh
 
 cd /opt/stack/devstack
 sed -i.bak "s/tempest,//" stackrc
