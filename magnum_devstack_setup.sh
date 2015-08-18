@@ -5,7 +5,6 @@ sudo yum install -y mysql-devel
 sudo yum install -y libxml2-devel
 sudo yum install -y libxslt-devel
 sudo yum install -y postgresql-devel
-sudo yum install -y git-review
 sudo yum install -y libffi-devel
 sudo yum install -y gettext
 sudo pip install virtualenv
@@ -13,6 +12,7 @@ sudo pip install setuptools-git
 sudo pip install flake8
 sudo pip install tox
 sudo pip install testrepository
+sudo pip install git-review
 sudo pip install -U virtualenv
 
 sudo mkdir -p /opt/stack
