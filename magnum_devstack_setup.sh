@@ -30,4 +30,5 @@ git commit -am "Local changes for magnum devstack onto stable/kilo"
 cd ~
 git clone https://git.openstack.org/openstack/magnum
 
+cd /opt/stack/devstack
 ./stack.sh
