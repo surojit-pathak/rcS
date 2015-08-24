@@ -29,3 +29,21 @@ function suro_validate_yaml ()
 { 
     python -c "import sys; import yaml;filed = open(sys.argv[1], 'r'); yaml.load(filed);" $1
 }
+
+# Function for assisting dev on devstack
+function suro_devs_git_reapply ()
+{   
+    if [ -z $SDGR_DEV_BASE]; then printf "Enter val for dev-base:\n"; read -r val; SDGR_DEV_BASE=$val; fi
+    if [ -z $SDGR_TOPIC]; then printf "Enter val for topic:\n"; read -r val; SDGR_TOPIC=$val; fi
+    if [ -z $SDGR_PATCHF]; then printf "Enter val for patch-file:\n"; read -r val; SDGR_PATCHF=$val; fi
+    # git checkout BP_magnum-service-list-dev-base;
+    set -e
+    git checkout $SDGR_DEV_BASE;
+    git branch -D $SDGR_TOPIC;
+    git checkout -b $SDGR_TOPIC;
+    git branch -v;
+    git am < $SDGR_PATCHF;
+    git log -1
+    set +e
+}
+
