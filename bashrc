@@ -23,3 +23,9 @@ function suro_rem_old_ssh_fingerprint ()
      LINE=$( grep -n $HOST $FILE | cut -f1 -d: )
      sed -i.bak "${LINE}d" $FILE
 }
+
+# Check yaml syntax of a given file
+function suro_validate_yaml () 
+{ 
+    python -c "import sys; import yaml;filed = open(sys.argv[1], 'r'); yaml.load(filed);" $1
+}
