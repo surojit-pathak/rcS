@@ -19,7 +19,7 @@ sudo mkdir -p /opt/stack
 sudo chown $USER /opt/stack
 git clone https://github.com/openstack-dev/devstack.git /opt/stack/devstack
 cd /opt/stack/devstack
-git checkout -b stable/kilo origin/stable/kilo
+#git checkout -b stable/kilo origin/stable/kilo
 cp ~/github-surojit-pathak/rcS/magnum.localrc /opt/stack/devstack/localrc
 cp ~/github-surojit-pathak/rcS/magnum.local.sh /opt/stack/devstack/local.sh
 sed -i.bak "s/tempest,//" stackrc
