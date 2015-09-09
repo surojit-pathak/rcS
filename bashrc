@@ -47,3 +47,23 @@ function suro_devs_git_reapply ()
     set +e
 }
 
+function _suro_devs_version_snapshot ()
+{
+    cd /opt/stack;
+    for i in `ls -l | grep ^d | awk '{print $NF}'`;
+    do
+        cd $i;
+        if [ -d .git ]; then
+            pwd;
+            git branch -v;
+        fi;
+        cd -;
+    done
+}
+
+# Function for taking snapshot of devstack version
+function suro_devs_version_snapshot ()
+{ 
+    _suro_devs_version_snapshot | grep -v "/opt/stack$"
+}
+
