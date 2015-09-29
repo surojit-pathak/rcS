@@ -67,3 +67,47 @@ function suro_devs_version_snapshot ()
     _suro_devs_version_snapshot | grep -v "/opt/stack$"
 }
 
+# Function for monitoring a bay creation of two node is complete
+function suro_magdev_monitor_bay_creation ()
+{
+    time=0
+    source /opt/stack/devstack/openrc admin admin
+
+    while true; 
+    do 
+        count=`nova list | grep ACTIVE | wc -l`; 
+        if [ $count -eq 2 ] ; then 
+            echo "Done "; break; 
+        fi; 
+        time=`expr $time + 5`; 
+        sleep 5; 
+        de=`expr $time % 60`; 
+        if [ $de -eq 0 ]; then 
+            echo "Spent $time"; 
+        fi; 
+        if [ $time -gt 1200 ]; then 
+            echo "No hope"; break; 
+        fi; 
+    done
+}
+
+# Function for returning the git top-of-the-tree
+function suro_git_source_top ()
+{ git rev-parse --show-toplevel; }
+
+# Function for ensuring UT before pushing to gerrit
+function suro_git_review ()
+{
+     srctop=`git rev-parse --show-toplevel`
+     cd $srctop
+     if [ -d '.tox' ] ; then
+         tox -epep8 && tox -epy27
+         if [ $? -ne 0 ]; then
+             echo "Unit test failed, aborting"
+             return 1
+         fi
+     else 
+         echo "No unit test for this repo"
+     fi
+     git review
+}
