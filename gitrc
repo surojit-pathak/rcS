@@ -2,3 +2,23 @@ git config --global user.name "Surojit Pathak"
 git config --global user.email surojit.pathak@gmail.com
 git config --global core.editor "vim"
 
+function git_patcher() 
+{
+    set -v
+
+    PATCH_TEST_BRANCH=patch-test
+
+    git checkout $PATCH_TEST_BRANCH
+    PARENT_BRANCH=`git branch -v | awk '{print $1}' | grep -v '*' | grep -v master | head -1`
+    git checkout $PARENT_BRANCH
+    git branch -D $PATCH_TEST_BRANCH
+    git checkout -b $PATCH_TEST_BRANCH
+    git branch -v
+    printf "\nWhere from to take the patches? \n"
+    read patch_src
+
+    set +v
+
+    suro_apply_patch_till_max_idx 100 $patch_src
+  
+}
