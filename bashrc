@@ -111,3 +111,10 @@ function suro_git_review ()
      fi
      git review
 }
+
+# Function to ssh, removing old fingerprint, if exists
+function suro_ssh ()
+{
+  ssh $1
+  if [ $? -ne 0 ] ; then  suro_rem_old_ssh_fingerprint $1 ; ssh $1; fi
+}
