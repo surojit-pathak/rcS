@@ -1,4 +1,4 @@
-[[local|localrc]]
+# [[local|localrc]]
 enable_plugin magnum https://github.com/openstack/magnum
 DATABASE_PASSWORD=password
 RABBIT_PASSWORD=password

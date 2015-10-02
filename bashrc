@@ -23,3 +23,91 @@ function suro_rem_old_ssh_fingerprint ()
      LINE=$( grep -n $HOST $FILE | cut -f1 -d: )
      sed -i.bak "${LINE}d" $FILE
 }
+
+# Check yaml syntax of a given file
+function suro_validate_yaml () 
+{ 
+    python -c "import sys; import yaml;filed = open(sys.argv[1], 'r'); yaml.load(filed);" $1
+}
+
+# Function for assisting dev on devstack
+function suro_devs_git_reapply ()
+{   
+    if [ -z $SDGR_DEV_BASE]; then printf "Enter val for dev-base:\n"; read -r val; SDGR_DEV_BASE=$val; fi
+    if [ -z $SDGR_TOPIC]; then printf "Enter val for topic:\n"; read -r val; SDGR_TOPIC=$val; fi
+    if [ -z $SDGR_PATCHF]; then printf "Enter val for patch-file:\n"; read -r val; SDGR_PATCHF=$val; fi
+    # git checkout BP_magnum-service-list-dev-base;
+    set -e
+    git checkout $SDGR_DEV_BASE;
+    git branch -D $SDGR_TOPIC;
+    git checkout -b $SDGR_TOPIC;
+    git branch -v;
+    git am < $SDGR_PATCHF;
+    git log -1
+    set +e
+}
+
+function _suro_devs_version_snapshot ()
+{
+    cd /opt/stack;
+    for i in `ls -l | grep ^d | awk '{print $NF}'`;
+    do
+        cd $i;
+        if [ -d .git ]; then
+            pwd;
+            git branch -v;
+        fi;
+        cd -;
+    done
+}
+
+# Function for taking snapshot of devstack version
+function suro_devs_version_snapshot ()
+{ 
+    _suro_devs_version_snapshot | grep -v "/opt/stack$"
+}
+
+# Function for monitoring a bay creation of two node is complete
+function suro_magdev_monitor_bay_creation ()
+{
+    time=0
+    source /opt/stack/devstack/openrc admin admin
+
+    while true; 
+    do 
+        count=`nova list | grep ACTIVE | wc -l`; 
+        if [ $count -eq 2 ] ; then 
+            echo "Done "; break; 
+        fi; 
+        time=`expr $time + 5`; 
+        sleep 5; 
+        de=`expr $time % 60`; 
+        if [ $de -eq 0 ]; then 
+            echo "Spent $time"; 
+        fi; 
+        if [ $time -gt 1200 ]; then 
+            echo "No hope"; break; 
+        fi; 
+    done
+}
+
+# Function for returning the git top-of-the-tree
+function suro_git_source_top ()
+{ git rev-parse --show-toplevel; }
+
+# Function for ensuring UT before pushing to gerrit
+function suro_git_review ()
+{
+     srctop=`git rev-parse --show-toplevel`
+     cd $srctop
+     if [ -d '.tox' ] ; then
+         tox -epep8 && tox -epy27
+         if [ $? -ne 0 ]; then
+             echo "Unit test failed, aborting"
+             return 1
+         fi
+     else 
+         echo "No unit test for this repo"
+     fi
+     git review
+}

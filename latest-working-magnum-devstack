@@ -1,0 +1,38 @@
+/opt/stack/ceilometer
+* master dd9eef4 Merge "doc: update notification_driver"
+/opt/stack/cinder
+* master cb790c0 Merge "Update update_migrated_volume in VNX driver"
+/opt/stack/devstack
+* master d9ac6ca [ahead 1] Local changes for magnum devstack onto stable/kilo
+/opt/stack/dib-utils
+* master ddd80ea Depend on awk rather than python
+/opt/stack/glance
+* master 8565a86 Merge "clean up requirements"
+/opt/stack/heat
+* master 0d2aff4 Merge "Clarify definition of server network prop in doc"
+/opt/stack/heat-cfntools
+* master e424af2 Fix cfntools command injection
+/opt/stack/heat-templates
+* master 37efe6f Use deployment name rather than id for compose project
+/opt/stack/keystone
+* master 21c8321 Imported Translations from Transifex
+/opt/stack/magnum
+* master 25ae7c7 Merge "Conductor: Remove _update_stack_outputs from bay_conductor"
+/opt/stack/neutron
+* master aa1c040 Merge "Add oslo rootwrap daemon logging during functional tests"
+/opt/stack/neutron-lbaas
+* master b84ec35 Updated from global requirements
+/opt/stack/nova
+* master 4f20438 Merge "ironic: convert driver to use nova.objects.ImageMeta"
+/opt/stack/noVNC
+* master 40b35fa Merge pull request #524 from kanaka/bug/tight-buffer-overread
+/opt/stack/os-apply-config
+* master 2e0a2f6 Updated from global requirements
+/opt/stack/os-collect-config
+* master b131229 Add support for zaqar transport
+/opt/stack/os-refresh-config
+* master 23eda7b Updated from global requirements
+/opt/stack/python-magnumclient
+* master e6dd7bb Merge "Updated from global requirements"
+/opt/stack/requirements
+* master b06740a Set minimum version for passlib
