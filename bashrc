@@ -108,6 +108,8 @@ function suro_git_review ()
          fi
      else 
          echo "No unit test for this repo"
+         echo "Use `git review` manually"
+         return 1
      fi
      git review
 }
