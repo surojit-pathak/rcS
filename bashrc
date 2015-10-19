@@ -120,3 +120,9 @@ function suro_ssh ()
   ssh $1
   if [ $? -ne 0 ] ; then  suro_rem_old_ssh_fingerprint $1 ; ssh $1; fi
 }
+
+# For using ssh-agent and screen, we need to persist the sock location
+if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
+    ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock;
+fi
+export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
