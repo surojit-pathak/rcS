@@ -7,12 +7,14 @@ sudo yum install -y git
 sudo yum install -y cscope
 sudo easy_install pip
 
+# gets suro_git_clone
+source ~/github-surojit-pathak/rcS/bashrc
+
 cd
 cd github-surojit-pathak
-git clone https://github.com/surojit-pathak/openstack-tools.git
-git clone https://github.com/surojit-pathak/mypylab.git
+suro_git_clone https://github.com/surojit-pathak/openstack-tools.git
+suro_git_clone https://github.com/surojit-pathak/mypylab.git
 cd
 
-source ~/github-surojit-pathak/rcS/bashrc
 _suro_init_pycscope
 

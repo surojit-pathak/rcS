@@ -4,7 +4,7 @@ function _suro_init_pycscope ()
     cd
     mkdir -p github/portante/
     cd github/portante/
-    git clone https://github.com/portante/pycscope.git
+    suro_git_clone https://github.com/portante/pycscope.git
     cd pycscope
     sudo python ./setup.py install
     cd
@@ -126,3 +126,18 @@ if [[ -S "$SSH_AUTH_SOCK" && ! -h "$SSH_AUTH_SOCK" ]]; then
     ln -sf "$SSH_AUTH_SOCK" ~/.ssh/ssh_auth_sock;
 fi
 export SSH_AUTH_SOCK=~/.ssh/ssh_auth_sock;
+
+# My version of git clone
+function suro_git_clone()
+{
+    URI=`echo $1 | cut -f2 -d\@`
+    GITNAME=`basename $URI`
+    DIRNAME=`echo $GITNAME | cut -f1 -d\.`
+    if [ -d $DIRNAME ]; then
+        cd $DIRNAME
+        git pull
+        cd -
+    else 
+        git clone $1
+    fi
+}
