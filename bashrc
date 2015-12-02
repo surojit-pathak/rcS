@@ -141,3 +141,20 @@ function suro_git_clone()
         git clone $1
     fi
 }
+
+# Change git-repo to access to SSH for pushing change
+function suro_git_set_ssh_url ()
+{
+    git remote -v
+    url=`git remote -v | grep origin | grep fetch | awk '{print $2}'`
+    is_http=$(python -c "import sys; print sys.argv[1].startswith('https')" $url)
+    if [ $is_http = "True" ]; then
+        proj=`basename $url`
+        user_url=`dirname $url`
+        user=`basename $user_url`
+        mod_url=git@github.com:$user/$proj
+        git remote set-url origin $mod_url
+    fi
+    git remote -v
+}
+
