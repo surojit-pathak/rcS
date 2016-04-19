@@ -97,18 +97,6 @@ function suro_create_alias_for_py_cmds()
     done
 }
 
-#install pycscopde 
-function _suro_init_pycscope ()
-{
-    cd
-    mkdir -p github/portante/
-    cd github/portante/
-    suro_git_clone https://github.com/portante/pycscope.git
-    cd pycscope
-    sudo python ./setup.py install
-    cd
-}
-
 # Remove old ssh fingerprint of a host
 function suro_rem_old_ssh_fingerprint ()
 {
@@ -240,6 +228,19 @@ function suro_git_clone()
         git clone $1
     fi
 }
+
+#install pycscopde 
+function _suro_init_pycscope ()
+{
+    cd
+    mkdir -p github/portante/
+    cd github/portante/
+    suro_git_clone https://github.com/portante/pycscope.git
+    cd pycscope
+    sudo python ./setup.py install
+    cd
+}
+
 
 # Change git-repo to access to SSH for pushing change
 function suro_git_set_ssh_url ()
