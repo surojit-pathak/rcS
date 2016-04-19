@@ -1,0 +1,12 @@
+sessionname hostabc
+caption always "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= @%H - %LD %d %LM - %c"
+screen -t shell bash
+stuff "source ~/rcS/bashrc^M"
+screen -t Root1 bash
+stuff "sudo su -^Msource ~suro/rcS/bashrc^M"
+screen -t Root2 bash
+stuff "sudo su -^Msource ~suro/rcS/bashrc^M"
+screen -t Root2 bash
+stuff "sudo su -^Msource ~suro/rcS/bashrc^M"
+screen -t shell bash
+stuff "source ~/rcS/bashrc^M"
