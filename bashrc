@@ -1,4 +1,103 @@
-# install pycscopde 
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+if [ -f /etc/bash_completion.d/git ] ; then source /etc/bash_completion.d/git; fi
+if [ -f /usr/share/git-core/contrib/completion/git-prompt.sh ] ; then source /usr/share/git-core/contrib/completion/git-prompt.sh; fi
+is_git_ps_def=`declare -F | grep __git_ps2 | wc -l`
+if [ $is_git_ps_def -eq 0 ]; then
+    if [ ! -f ~/.git-prompt.sh ] ; then
+        curl -o ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
+    fi
+    source ~/.git-prompt.sh
+fi
+
+
+export PS1='[\u@\h \W$(__git_ps1)]\$ '
+export CSCOPE_EDITOR=vim
+export vi=vim
+
+function suro_add_git_mod_files ()
+{
+    for i in `git status | grep modified: | awk '{print $NF}'`; do git add $i; done
+}
+
+# Remove all the .rej files from 'git am'
+function suro_rem_git_am_rej_files ()
+{
+    for i in `git status | grep ".rej$" | awk '{print $NF}'`; do rm "$i"; done
+}
+
+# Remove all the .rej files from 'git am'
+function suro_git_rem_orig_files ()
+{
+    for i in `git status | grep ".orig$" | awk '{print $NF}'`; do rm "$i"; done
+}
+
+# function: Clone a gist, given its URL
+function suro_gist_download ()
+{
+    git clone `echo "$1" | sed -e "s/^https:\/\//git\@/" | sed -e "s/\/gist\/[a-z]*\//:/" | sed -e "s/\$/.git/"`
+}
+
+# function: Clone a gist, given its URL
+function suro_generate_export_list()
+{
+    if [ $# -eq 0 ]; then
+        pat="=";
+    else
+        pat=$1;
+    fi;
+    for i in `env | grep $pat`;
+    do
+        echo export $i;
+    done
+}
+
+function suro_apply_patch_till_max_idx () {
+    if [ $# -lt 1 ] ; then echo Wrong number of Args; return 1; fi;
+    if [ $# -ge 2 ] ; then unset dir; fi;
+    count=0
+    max=$1
+    dir=${2:-"/default_path_to_patches"}
+
+    for i in `ls $dir`;
+    do
+        j=`echo $i | cut -f1 -d\-`;
+        if [ $j -ge $max ] ; then break; fi;
+        git am < $dir/$i
+        #echo $dir/$i
+        if [ $? -ne 0 ] ; then break; fi;
+        count=`expr $count + 1`
+    done
+}
+
+# Throw a modified branch and create a new one from tag
+function suro_git_branch_reset () {
+    if [ $# -lt 1 ] ; then echo Wrong number of Args; break; fi;
+    echo $0;
+    branch=$1
+    git checkout -f master;
+    git branch -D $branch;
+    git pull;
+    git checkout -b $branch $branch;
+    git branch -v
+}
+
+# function create alias for all py commands
+function suro_create_alias_for_py_cmds()
+{
+    for i in `ls ~/Tools/pylets/*.py`;
+    do
+        exe=`basename $i | cut -f 1 -d.`;
+        alias $exe=python\ $i ;
+    done
+}
+
+#install pycscopde 
 function _suro_init_pycscope ()
 {
     cd
@@ -161,7 +260,24 @@ function suro_git_set_ssh_url ()
 # Look up for cetain words
 function suro_lookup_certain_text ()
 {
-    DICT=$0
-    TARGET=$1
+    DICT=$1
+    TARGET=$2
     for i in `cat $DICT`; do grep -Irn $i $TARGET/*; done
 }
+
+function suro_bootstrap_host ()
+{
+    cd
+    sudo yum install -y git
+
+    # Run the following as a separate block
+    mkdir github-surojit-pathak
+    git clone https://github.com/surojit-pathak/rcS.git github-surojit-pathak/rcS
+    github-surojit-pathak/rcS/bootstrapme.sh
+    echo "Host git.corp.blah.com" >> ~/.ssh/config
+    echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+    chmod 600 ~/.ssh/config
+    git clone git@git.corp.blah.com:suro/rcS.git
+    rcS/bootmestrap.sh
+}
+
