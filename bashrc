@@ -158,3 +158,10 @@ function suro_git_set_ssh_url ()
     git remote -v
 }
 
+# Look up for cetain words
+function suro_lookup_certain_text ()
+{
+    DICT=$0
+    TARGET=$1
+    for i in `cat $DICT`; do grep -Irn $i $TARGET/*; done
+}
