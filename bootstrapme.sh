@@ -25,3 +25,41 @@ cd
 
 _suro_init_pycscope
 
+function setup_rc()
+{
+    _user=$1
+    _file=$2
+    TEMPFILE=`mktemp`
+    chmod +w  $TEMPFILE
+ 
+    # The enterprise version of rc should get preference
+    # in case of re-definition
+    if [ -f ~/github-surojit-pathak/rcS/$_file ]; then
+        cp -f ~/github-surojit-pathak/rcS/${_file} $TEMPFILE
+    fi 
+    cat rcS/${_file} >> $TEMPFILE
+
+    if [ $_user != "root" ]; then
+        HOME_LOC=/home/${_user}
+        CP="cp"
+    else
+        HOME_LOC=/root
+        CP="sudo cp"
+    fi
+    $CP -f $TEMPFILE ${HOME_LOC}/.${_file}
+    rm -rf $TEMPFILE
+}
+
+setup_rc $USER bashrc
+source ~/.bashrc
+
+setup_rc $USER screenrc
+setup_rc $USER vimrc
+setup_rc $USER gitrc
+source ~/.gitrc
+suro_create_alias_for_py_cmds
+
+#setup_rc root bashrc
+#setup_rc root screenrc
+#setup_rc root vimrc
+#setup_rc root gitrc
